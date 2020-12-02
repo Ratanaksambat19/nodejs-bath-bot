@@ -116,12 +116,32 @@ function firstTrait(nlp, name) {
   
   function handleMessage(sender_psid ,message) {
     // check greeting is here and is confident
-    const greeting = firstTrait(message.nlp, 'wit$greetings');
-    if (greeting && greeting.confidence > 0.8) {
-      callSendAPI(sender_psid ,'Hi there!');
-    } else { 
-      // default logic
-      callSendAPI(sender_psid ,'Nothing');
+    let entitiesArr = ["wit$greetings", "wit$thanks", "wit$bye"];
+    let entityChosen = "";
+
+    entitiesArr.forEach((name) => {
+        let entity = firstTrait(message.nlp, name);
+        if (entity && entity.confidence > 0.8) {
+            entityChosen = name;
+        }
+    });
+
+    if(entityChosen === "") {
+        callSendAPI(sender_psid, "I don't know vroo")
+    }
+
+    else {
+        if (entityChosen === "with$greetings"){
+            callSendAPI(sender_psid, "Hii darling")
+        }
+
+        if (entityChosen === "with$thanks"){
+            callSendAPI(sender_psid, "You're welcome")
+        }
+        
+        if (entityChosen === "with$bye"){
+            callSendAPI(sender_psid, "Have a nice day!")
+        }
     }
   }
 
