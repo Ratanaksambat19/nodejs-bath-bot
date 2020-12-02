@@ -1,4 +1,5 @@
 require('dotenv').config()
+import request from "request";
 
 let postWebhook = (req, res) => {
     // Parse the request body from the POST
@@ -95,17 +96,18 @@ function callSendAPI(sender_psid, response) {
 
     // Send the HTTP request to the Messenger Platform
     request({
-        "uri": "https://graph.facebook.com/v2.6/me/messages",
-        "qs": { "access_token": process.env.PAGE_ACCESS_TOKEN },
+        "uri": "https://graph.facebook.com/v6.0/me/messages",
+        "qs": { "access_token": process.env.FB_PAGE_TOKEN },
         "method": "POST",
         "json": request_body
-    }, (err, res, body) => {
-        if (!err) {
-        console.log('message sent!')
-        } else {
-        console.error("Unable to send message:" + err);
-        }
-    });
+            }, (err, res, body) => {
+                if (!err) {
+                console.log('message sent!')
+                console.log(`My message: ${response}`)
+                } else {
+                console.error("Unable to send message:" + err);
+                }
+            });
 }
 
 module.exports = {
